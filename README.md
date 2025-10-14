@@ -5,7 +5,7 @@ Basic Object Orientated Software Engineering (BOOSE).
 
 Fill in the fields below.
 
-## Samir Hussain 
+## Samir Hussain !
 
 ## Your Group ...
 Each element is covered in the weekly sessions, using the BOOSE library source code as an example.  
