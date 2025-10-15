@@ -11,12 +11,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("BOOSEcode")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("BOOSEcode2")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9c916503759649e31abc112644d3a39d3683c523")]
-[assembly: System.Reflection.AssemblyProductAttribute("BOOSEcode")]
-[assembly: System.Reflection.AssemblyTitleAttribute("BOOSEcode")]
+[assembly: System.Reflection.AssemblyProductAttribute("BOOSEcode2")]
+[assembly: System.Reflection.AssemblyTitleAttribute("BOOSEcode2")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 [assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")]
