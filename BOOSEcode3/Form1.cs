@@ -4,7 +4,8 @@ namespace BOOSEcode3
     {
         public Form1()
         {
-            InitializeComponent();
+            InitializeComponent()
+                us;
         }
     }
 }
