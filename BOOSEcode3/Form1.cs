@@ -1,11 +1,15 @@
+using BOOSE;
+using System.Diagnostics;
+
 namespace BOOSEcode3
 {
     public partial class Form1 : Form
     {
         public Form1()
         {
-            InitializeComponent()
-                us;
+            InitializeComponent();
+            Debug.WriteLine(AboutBOOSE.about());
+             
         }
     }
 }
