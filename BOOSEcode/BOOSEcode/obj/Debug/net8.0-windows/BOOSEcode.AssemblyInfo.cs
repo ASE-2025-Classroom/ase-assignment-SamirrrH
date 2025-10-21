@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BOOSEcode")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+508bd538fbdfe56166e86c1627097faec9d7411f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+65fd26f99f4e33e7e0d2f9f3aa0b6ac55959b873")]
 [assembly: System.Reflection.AssemblyProductAttribute("BOOSEcode")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BOOSEcode")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
