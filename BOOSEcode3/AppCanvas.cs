@@ -33,17 +33,17 @@ namespace BOOSEcode3
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void DrawTo(int x, int y)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public object getBitmap()
         {
-            throw new NotImplementedException();
+            return CanvasBitmap;
         }
 
         public void MoveTo(int x, int y)
@@ -59,7 +59,8 @@ namespace BOOSEcode3
 
         public void Reset()
         {
-            throw new NotImplementedException();
+            Xpos = 100;
+            Ypos = 100;
         }
 
         public void Set(int width, int height)
