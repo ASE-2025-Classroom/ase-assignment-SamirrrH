@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace BOOSEapp1
 {
-    internal class AppCanvas : ICanvas
+    public class AppCanvas : ICanvas
     {
         private Bitmap canvasBitmap;
         private Graphics g;
@@ -55,13 +55,11 @@ namespace BOOSEapp1
 
         public void Circle(int radius, bool filled)
         {
-            
-            Rectangle rect = new Rectangle(Xpos, Ypos, radius * 2, radius * 2);
+            int d = radius * 2;
+            int x = Xpos - radius;
+            int y = Ypos - radius;
 
-            if (filled)
-                g.FillEllipse(brush, rect);
-            else
-                g.DrawEllipse(pen, rect);
+            g.DrawEllipse(pen, x, y, d, d);
         }
 
         public void Clear()
