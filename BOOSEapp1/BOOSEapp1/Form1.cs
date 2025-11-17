@@ -1,6 +1,8 @@
+using BOOSE;
+using BOOSEapp1;
 using System;
+using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace BOOSEapp1
@@ -8,154 +10,121 @@ namespace BOOSEapp1
     public partial class Form1 : Form
     {
         private AppCanvas canvas;
+        private CommandFactory factory;
+        private StoredProgram program;
+        private IParser parser;
+
         private TextBox txtProgram;
         private Button btnRun;
+        private Button btnReset;  // RESET BUTTON
 
         public Form1()
         {
             InitializeComponent();
 
-            
+            this.Width = 1100;
+            this.Height = 800;
+
             txtProgram = new TextBox
             {
                 Multiline = true,
                 ScrollBars = ScrollBars.Vertical,
-                Font = new Font("Consolas", 10),
+                Font = new Font("Calibri", 10),
                 Left = 10,
                 Top = 10,
-                Width = 320,
-                Height = ClientSize.Height - 60,
-                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left
+                Width = 300,
+                Height = 650
             };
             Controls.Add(txtProgram);
 
-            
             btnRun = new Button
             {
                 Text = "Run",
+                Font = new Font("Calibri", 10),
                 Left = 10,
-                Top = ClientSize.Height - 40,
+                Top = 670,
                 Width = 80,
-                Height = 30,
-                Anchor = AnchorStyles.Bottom | AnchorStyles.Left
+                Height = 30
             };
-            btnRun.Click += (s, e) =>
-            {
-                RunScript(txtProgram.Text);
-                Invalidate();   
-            };
+            btnRun.Click += BtnRun_Click;
             Controls.Add(btnRun);
 
-            
-            this.Paint += Form1_Paint;
+            // --- RESET BUTTON ---
+            btnReset = new Button
+            {
+                Text = "Reset Canvas",     // Button label
+                Font = new Font("Calibri", 10),
+                Left = 100,
+                Top = 670,
+                Width = 120,
+                Height = 30
+            };
+            btnReset.Click += BtnReset_Click;
+            Controls.Add(btnReset);
+            // ----------------------
 
-            
             canvas = new AppCanvas(1000, 600);
             canvas.Clear();
+
+            factory = new AppCommandFactory();
+            program = new StoredProgram(canvas);
+            parser = new Parser(factory, program);
+
+            this.Paint += Form1_Paint;
+            this.Load += Form1_Load;
+
+            Debug.WriteLine(AboutBOOSE.about());
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        public AppCanvas Canvas => canvas;
+
+        private void BtnRun_Click(object sender, EventArgs e)
         {
-            var bmp = (Bitmap)canvas.getBitmap();
-            if (bmp == null) return;
-
-            int left = txtProgram.Right + 20;
-            int top = 10;
-
-            e.Graphics.DrawImage(bmp, left, top);
-        }
-
-        private void RunScript(string src)
-        {
-            canvas.Clear();
-            canvas.Reset();
-
-            var lines = src.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
-            foreach (var raw in lines)
+            try
             {
-                var line = raw.Trim();
-                if (line.Length == 0) continue;
-                if (line.StartsWith("*") || line.StartsWith("#")) continue;
-
-                int space = line.IndexOf(' ');
-                string cmd = (space < 0 ? line : line[..space]).ToLowerInvariant();
-                string args = (space < 0 ? "" : line[(space + 1)..]).Trim();
-
-                switch (cmd)
-                {
-                    case "moveto":
-                        {
-                            var (x, y) = Two(args);
-                            canvas.MoveTo(x, y);
-                            break;
-                        }
-                    case "drawto":
-                        {
-                            var (x, y) = Two(args);
-                            canvas.DrawTo(x, y);
-                            break;
-                        }
-                    case "pen":
-                    case "setcolour":
-                        {
-                            var (r, g, b) = Three(args);
-                            canvas.SetColour(r, g, b);
-                            break;
-                        }
-                    case "circle":
-                        {
-                            int r = One(args);
-                            canvas.Circle(r, false);
-                            break;
-                        }
-                    case "rect":
-                        {
-                            var (w, h) = Two(args);
-                            canvas.Rect(w, h, false);
-                            break;
-                        }
-                    case "tri":
-                        {
-                            var (w, h) = Two(args);
-                            canvas.Tri(w, h);
-                            break;
-                        }
-                    case "write":
-                        {
-                            canvas.WriteText(args.Trim().Trim('"'));
-                            break;
-                        }
-                    case "clear":
-                        canvas.Clear();
-                        break;
-
-                    case "reset":
-                        canvas.Reset();
-                        break;
-                }
+                canvas.Clear();
+                parser.ParseProgram(txtProgram.Text);
+                program.Run();
+                Invalidate();
+            }
+            catch (BOOSE.CanvasException ex)
+            {
+                MessageBox.Show(ex.Message, "BOOSE Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unexpected error: " + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private static int One(string s) => int.Parse(s.Trim());
-
-        private static (int, int) Two(string s)
+        // --- RESET BUTTON LOGIC ---
+        private void BtnReset_Click(object sender, EventArgs e)
         {
-            var p = s.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                     .Select(t => t.Trim())
-                     .ToArray();
-            return (int.Parse(p[0]), int.Parse(p[1]));
+            canvas.Clear();   // Same action as a clear button
+            Invalidate();     // Refresh screen to show blank canvas
+        }
+        // --------------------------
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            Bitmap bmp = (Bitmap)canvas.getBitmap();
+            if (bmp != null)
+            {
+                e.Graphics.DrawImage(bmp, 330, 10);
+            }
         }
 
-        private static (int, int, int) Three(string s)
+        public void RunScript(string source)
         {
-            var p = s.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                     .Select(t => t.Trim())
-                     .ToArray();
-            return (int.Parse(p[0]), int.Parse(p[1]), int.Parse(p[2]));
+            canvas.Clear();
+            parser.ParseProgram(source);
+            program.Run();
         }
     }
 }
