@@ -2,9 +2,15 @@
 
 namespace BOOSEapp1.Tests
 {
+    /// <summary>
+    /// Tests for the AppCanvas class.
+    /// </summary>
     [TestClass]
     public class AppCanvasTests
     {
+        /// <summary>
+        /// Checks that MoveTo sets the pen position.
+        /// </summary>
         [TestMethod]
         public void MoveTo_SetsPenPosition()
         {
@@ -19,6 +25,9 @@ namespace BOOSEapp1.Tests
             Assert.AreEqual(200, canvas.Ypos);
         }
 
+        /// <summary>
+        /// Checks that DrawTo moves the pen to a new position.
+        /// </summary>
         [TestMethod]
         public void DrawTo_UpdatesPenPosition()
         {
@@ -34,6 +43,9 @@ namespace BOOSEapp1.Tests
             Assert.AreEqual(50, canvas.Ypos);
         }
 
+        /// <summary>
+        /// Checks the final pen position after several commands.
+        /// </summary>
         [TestMethod]
         public void MultilineProgram_EndsAtExpectedPosition()
         {

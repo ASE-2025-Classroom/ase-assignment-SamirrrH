@@ -1,38 +1,64 @@
 ﻿using BOOSE;
-using BOOSEapp1;
 using System;
 
 namespace BOOSEapp1
 {
     /// <summary>
-    /// Factory that creates the correct command based on the given name.
+    /// Creates the correct command object based on the command name.
     /// </summary>
-    internal class AppCommandFactory : CommandFactory
+    public class AppCommandFactory : CommandFactory
     {
         /// <summary>
-        /// Returns a command object that matches the requested command name.
+        /// Builds and returns the right command for the given text.
         /// </summary>
-        /// <param name="commandType">The command name typed by the user.</param>
-        /// <returns>A matching command, or the base factory’s version if not found.</returns>
+        /// <param name="commandType">The command name from the script.</param>
+        /// <returns>The matching command object.</returns>
         public override ICommand MakeCommand(string commandType)
         {
-            commandType = commandType.ToLowerInvariant();
+            /// <summary>
+            /// Cleans the command text so it is safe to compare.
+            /// </summary>
+            commandType = (commandType ?? "").Trim().ToLowerInvariant();
 
-            if (commandType == "circle")
-            {
-                return new AppCircle();
-            }
+            /// <summary>
+            /// Drawing commands.
+            /// </summary>
+            if (commandType == "circle") return new AppCircle();
+            if (commandType == "moveto") return new AppMoveTo();
+            if (commandType == "rect") return new AppRect();
+            if (commandType == "write") return new AppWrite();
 
-            if (commandType == "moveto")
-            {
-                return new AppMoveTo();
-            }
+            /// <summary>
+            /// Variable commands.
+            /// </summary>
+            if (commandType == "int") return new AppInteg();
+            if (commandType == "real") return new AppReal();
 
-            if (commandType == "rect")
-            {
-                return new AppRect();
-            }
+            /// <summary>
+            /// Array commands.
+            /// </summary>
+            if (commandType == "array") return new AppArray();
+            if (commandType == "poke") return new AppPoke();
+            if (commandType == "peek") return new AppPeek();
 
+            /// <summary>
+            /// Flow control commands.
+            /// </summary>
+            if (commandType == "if") return new AppIf();
+            if (commandType == "else") return new AppElse();
+            if (commandType == "while") return new AppWhile();
+            if (commandType == "for") return new AppFor();
+            if (commandType == "end") return new AppEnd();
+
+            /// <summary>
+            /// Method commands.
+            /// </summary>
+            if (commandType == "method") return new AppMethod();
+            if (commandType == "call") return new AppCall();
+
+            /// <summary>
+            /// Uses the default factory if no match is found.
+            /// </summary>
             return base.MakeCommand(commandType);
         }
     }

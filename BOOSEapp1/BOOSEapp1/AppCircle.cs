@@ -8,40 +8,52 @@ namespace BOOSEapp1
     /// </summary>
     public class AppCircle : CommandOneParameter
     {
+        /// <summary>
+        /// The radius of the circle to draw.
+        /// </summary>
         private int radius;
 
         /// <summary>
-        /// Default constructor used by the factory.
+        /// Default constructor used by the command factory.
         /// </summary>
         public AppCircle() : base()
         {
         }
 
         /// <summary>
-        /// Creates the command with a specific canvas and radius.
+        /// Creates a circle command with a canvas and radius.
         /// </summary>
+        /// <param name="c">The canvas to draw on.</param>
+        /// <param name="radius">The radius of the circle.</param>
         public AppCircle(Canvas c, int radius) : base(c)
         {
             this.radius = radius;
         }
 
         /// <summary>
-        /// Runs the circle command and draws the shape.
+        /// Runs the command, checks the value, and draws the circle.
         /// </summary>
         public override void Execute()
         {
             // Parse the parameter from BOOSE.
             base.Execute();
 
+            /// <summary>
+            /// Gets the radius value passed to the command.
+            /// </summary>
             radius = Paramsint[0];
 
-            // Make sure the radius is a valid number.
+            /// <summary>
+            /// Checks that the radius is a valid positive number.
+            /// </summary>
             if (radius < 1)
             {
                 throw new CanvasException("Circle radius must be greater than 0.");
             }
 
-            // Draws the circle outline.
+            /// <summary>
+            /// Draws the circle outline on the canvas.
+            /// </summary>
             Canvas.Circle(radius, false);
         }
     }
